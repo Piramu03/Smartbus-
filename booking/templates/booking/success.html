@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Booking Successful</title>
+  <style>
+    :root {
+      --dashboard-bg: #1a1625;
+      --dashboard-card: #2a253a;
+      --dashboard-purple: #8b5cf6;
+      --dashboard-blue: #6366f1;
+      --dashboard-accent: #a855f7;
+      --dashboard-text: #e2e8f0;
+      --dashboard-text-muted: #94a3b8;
+      --dashboard-border: rgba(255, 255, 255, 0.1);
+      --dashboard-hover: rgba(255, 255, 255, 0.05);
+      --success-green: #10b981;
+      --glass-overlay: rgba(255, 255, 255, 0.08);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.3);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --spacing-xs: 0.5rem;
+      --spacing-sm: 1rem;
+      --spacing-md: 1.5rem;
+      --spacing-lg: 2rem;
+      --spacing-xl: 3rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--dashboard-bg);
+      color: var(--dashboard-text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-sm);
+      position: relative;
+    }
+
+    /* Dashboard-style background pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, var(--dashboard-purple) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, var(--dashboard-blue) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, var(--dashboard-accent) 0%, transparent 50%);
+      opacity: 0.1;
+      z-index: -1;
+    }
+
+    .container {
+      background: var(--dashboard-card);
+      border: 1px solid var(--dashboard-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: var(--spacing-xl);
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      backdrop-filter: blur(10px);
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--dashboard-purple), var(--dashboard-blue), var(--dashboard-accent));
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto var(--spacing-md);
+      background: linear-gradient(135deg, var(--success-green), var(--dashboard-blue));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+      animation: successPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes successPulse {
+      0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+      }
+      50% { 
+        transform: scale(1.05);
+        box-shadow: 0 12px 35px rgba(16, 185, 129, 0.3);
+      }
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: var(--spacing-sm);
+      background: linear-gradient(135deg, var(--dashboard-text), var(--dashboard-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--dashboard-text-muted);
+      font-size: 1.1rem;
+      margin-bottom: var(--spacing-lg);
+      line-height: 1.5;
+    }
+
+    .summary {
+      background: var(--glass-overlay);
+      border: 1px solid var(--dashboard-border);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      margin: var(--spacing-lg) 0;
+      text-align: left;
+      backdrop-filter: blur(5px);
+    }
+
+    .summary-header {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--dashboard-text);
+      margin-bottom: var(--spacing-md);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: var(--spacing-xs) 0;
+      border-bottom: 1px solid var(--dashboard-border);
+      gap: var(--spacing-md);
+    }
+
+    .summary-item:last-child {
+      border-bottom: none;
+    }
+
+    .summary-label {
+      font-weight: 500;
+      color: var(--dashboard-text-muted);
+      min-width: 100px;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+
+    .summary-value {
+      font-weight: 600;
+      color: var(--dashboard-text);
+      text-align: right;
+      flex: 1;
+    }
+
+    .seat-display {
+      display: flex;
+      gap: var(--spacing-xs);
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .seat-badge {
+      background: linear-gradient(135deg, var(--dashboard-purple), var(--dashboard-blue));
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-xs);
+      margin-top: var(--spacing-lg);
+      padding: var(--spacing-sm) var(--spacing-lg);
+      background: linear-gradient(135deg, var(--dashboard-purple), var(--dashboard-blue));
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    /* Dashboard-style stats cards animation */
+    .container {
+      animation: slideInUp 0.6s ease-out;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive design */
+    @media (max-width: 640px) {
+      .container {
+        padding: var(--spacing-lg);
+        margin: var(--spacing-xs);
+      }
+
+      h1 {
+        font-size: 1.875rem;
+      }
+
+      .summary-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-xs);
+      }
+
+      .summary-value {
+        text-align: left;
+      }
+
+      .seat-display {
+        justify-content: flex-start;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    /* Dashboard-style hover effects */
+    .summary-item:hover {
+      background: var(--dashboard-hover);
+      border-radius: var(--radius-sm);
+      margin: 0 calc(var(--spacing-xs) * -1);
+      padding: var(--spacing-xs);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="success-icon">
+      ✅
+    </div>
+    
+    <h1>Booking Successful!</h1>
+    <p class="subtitle">
+      Thank you for booking with Smart Bus Booking System.
+    </p>
+
+    <div class="summary">
+      <div class="summary-header">
+        🎫 Booking Details
+      </div>
+      
+      <div class="summary-item">
+        <span class="summary-label">
+          👤 Passenger
+        </span>
+        <span class="summary-value">{{ passenger_name }}</span>
+      </div>
+
+      <div class="summary-item">
+        <span class="summary-label">
+          🚌 Bus
+        </span>
+        <span class="summary-value">{{ bus.bus_name }} ({{ bus.number_plate }})</span>
+      </div>
+
+      <div class="summary-item">
+        <span class="summary-label">
+          🗺️ Route
+        </span>
+        <span class="summary-value">{{ route }}</span>
+      </div>
+
+      <div class="summary-item">
+        <span class="summary-label">
+          💺 Seat(s)
+        </span>
+        <div class="seat-display">
+          <!-- Django template loop -->
+          {% for seat in seats %}
+          <span class="seat-badge">{{ seat }}</span>
+          {% endfor %}
+          <!-- For demo purposes, uncomment below if no Django context -->
+          <!-- <span class="seat-badge">A1</span>
+          <span class="seat-badge">A2</span> -->
+        </div>
+      </div>
+
+      <div class="summary-item">
+        <span class="summary-label">
+          📅 Date
+        </span>
+        <span class="summary-value">{{ journey_date }}</span>
+      </div>
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="btn">
+      🏠 Home
+    </a>
+  </div>
+</body>
+</html>

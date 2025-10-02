@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Page</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #010a14, #0b1f3a);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(0, 170, 255, 0.4);
+    }
+
+    .login-container .icon {
+      font-size: 60px;
+      color: #00bfff;
+      margin-bottom: 20px;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+    }
+
+    .login-container input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .login-container .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #ccc;
+      margin: 10px 0;
+    }
+
+    .login-container .login-btn {
+      margin-top: 20px;
+      background: linear-gradient(to right, #0078ff, #00d4ff);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: 0.3s;
+    }
+
+    .login-btn:hover {
+      box-shadow: 0 0 15px #00bfff;
+    }
+
+    .error {
+      color: #ff6b6b;
+      margin-top: 10px;
+    }
+
+    .signup-link {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .signup-link a {
+      color: #00d4ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="icon">Login</div>
+    <form method="post">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
+
+      <div class="options">
+
+        <a href="{% url 'signup' %}">Forgot Password?</a>
+      </div>
+
+      <button type="submit" class="login-btn">LOGIN</button>
+
+      {% if error %}
+        <div class="error">{{ error }}</div>
+      {% endif %}
+
+      <div class="signup-link">
+        Don't have an account? <a href="{% url 'signup' %}">Signup now</a>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>

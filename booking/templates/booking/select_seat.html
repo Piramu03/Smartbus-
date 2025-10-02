@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Your Seat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1d35 0%, #2d3561 50%, #3b4a7a 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a855f7, #ec4899, #8b5cf6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #a0a9c0;
+            font-weight: 300;
+        }
+
+        .bus-container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            gap: 25px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .legend-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .legend-seat {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .legend-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .bus-layout {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .steering-wheel {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 3rem;
+            color: #a855f7;
+        }
+
+        .bus {
+            display: grid;
+            grid-template-columns: 60px 60px 30px 60px 60px;
+            grid-gap: 15px;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1));
+            border-radius: 20px;
+            border: 2px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .seat {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            user-select: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .seat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .seat:hover::before {
+            opacity: 1;
+        }
+
+        .seat.available {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .seat.available:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+        }
+
+        .seat.available:focus {
+            outline: none;
+            border-color: #ec4899;
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.3);
+        }
+
+        .seat.selected {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: #ffffff;
+            border-color: #a855f7;
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .seat.selected:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
+        }
+
+        .seat.booked {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            color: #9ca3af;
+            cursor: not-allowed;
+            border-color: #4b5563;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .seat.booked:hover {
+            transform: none;
+        }
+
+        .aisle {
+            background-color: transparent;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 0.8rem;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .selection-info {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(168, 85, 247, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .selected-seats {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 10px;
+        }
+
+        .seat-count {
+            font-size: 0.9rem;
+            color: #a0a9c0;
+        }
+
+        .next-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+            margin: 0 auto;
+            display: block;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+        }
+
+        .next-btn:disabled {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .csrf-info {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #22c55e;
+            font-size: 0.9rem;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #ef4444;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .legend {
+                gap: 15px;
+            }
+            
+            .bus {
+                grid-gap: 10px;
+                padding: 15px;
+            }
+            
+            .seat {
+                width: 50px;
+                height: 50px;
+                font-size: 1rem;
+            }
+            
+            .bus {
+                grid-template-columns: 50px 50px 25px 50px 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Select Your Seat</h1>
+            <p>Choose your preferred seat for a comfortable journey</p>
+        </div>
+
+        <div class="csrf-info">
+            ✅ CSRF Protection Enabled - Forms are now secure
+        </div>
+
+        <div class="error-message" id="error-message">
+            ❌ An error occurred. Please try again.
+        </div>
+
+        <div class="bus-container">
+            <!-- Legend -->
+            <div class="legend" role="list" aria-label="Seat availability legend">
+                <div class="legend-item" role="listitem">
+                    <div class="legend-seat seat selected" aria-hidden="true">S</div>
+                    <span class="legend-text">Selected</span>
+                </div>
+                <div class="legend-item" role="listitem">
+                    <div class="legend-seat seat booked" aria-hidden="true">B</div>
+                    <span class="legend-text">Booked</span>
+                </div>
+                <div class="legend-item" role="listitem">
+                    <div class="legend-seat seat available" aria-hidden="true">A</div>
+                    <span class="legend-text">Available</span>
+                </div>
+            </div>
+
+            <!-- Bus Layout -->
+            <div class="bus-layout">
+                <div class="steering-wheel">🚗</div>
+                
+                <form id="seat-form" method="post" action="{% url 'select_seat' bus_id=bus_id %}" aria-label="Seat selection form">
+                    {% csrf_token %}
+                    
+                    <div class="bus" role="list" aria-label="Bus seats">
+                        {% for seat in seats %}
+                            {% if seat == '' %}
+                                <!-- Aisle space -->
+                                <div class="aisle" aria-hidden="true">AISLE</div>
+                            {% elif seat == 'steering' %}
+                                <!-- Steering wheel placeholder -->
+                                <div class="steering-wheel">🚗</div>
+                            {% else %}
+                                {% if seat in occupied_seats %}
+                                    <!-- Booked seat -->
+                                    <div class="seat booked" data-seat="{{ seat }}" aria-disabled="true" aria-label="Seat {{ seat }} - Already booked">{{ seat }}</div>
+                                {% else %}
+                                    <!-- Available seat -->
+                                    <div class="seat available" data-seat="{{ seat }}" role="button" tabindex="0" aria-pressed="false" aria-label="Seat {{ seat }} - Available for selection">{{ seat }}</div>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    
+                    <input type="hidden" name="selected_seats" id="selected_seats" aria-live="polite">
+                    
+                    <div class="selection-info">
+                        <div class="selected-seats" id="selected-display">No seats selected</div>
+                        <div class="seat-count" id="seat-count">Please select your seats to continue</div>
+                    </div>
+                    
+                    <button type="submit" class="next-btn" id="next-btn" disabled>Continue Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CSRF Token Management for Django
+        function getCSRFToken() {
+            // Get Django CSRF token from cookie
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            return getCookie('csrftoken');
+        }
+
+        // Set CSRF token on page load (Django handles this automatically)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Django's {% csrf_token %} automatically handles the token
+            console.log('Django CSRF protection enabled');
+        });
+
+        // Seat Selection Logic
+        const seats = document.querySelectorAll('.seat.available');
+        const selectedInput = document.getElementById('selected_seats');
+        const selectedDisplay = document.getElementById('selected-display');
+        const seatCount = document.getElementById('seat-count');
+        const nextBtn = document.getElementById('next-btn');
+        const errorMessage = document.getElementById('error-message');
+        const seatForm = document.getElementById('seat-form');
+        const successUrl = "{% url 'booking_success' %}";
+
+        let selectedSeats = [];
+
+        seats.forEach(seat => {
+            // Click handler
+            seat.addEventListener('click', () => {
+                toggleSeat(seat);
+            });
+            
+            // Keyboard handler for accessibility
+            seat.addEventListener('keydown', (e) => {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    toggleSeat(seat);
+                }
+            });
+        });
+
+        function toggleSeat(seat) {
+            const seatId = seat.getAttribute('data-seat');
+            
+            if (seat.classList.contains('selected')) {
+                seat.classList.remove('selected');
+                seat.setAttribute('aria-pressed', 'false');
+                selectedSeats = selectedSeats.filter(s => s !== seatId);
+            } else {
+                seat.classList.add('selected');
+                seat.setAttribute('aria-pressed', 'true');
+                if (!selectedSeats.includes(seatId)) {
+                    selectedSeats.push(seatId);
+                }
+            }
+            
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            selectedInput.value = selectedSeats.join(',');
+            
+            if (selectedSeats.length === 0) {
+                selectedDisplay.textContent = 'No seats selected';
+                seatCount.textContent = 'Please select your seats to continue';
+                nextBtn.disabled = true;
+            } else {
+                selectedDisplay.textContent = `Selected: ${selectedSeats.join(', ')}`;
+                seatCount.textContent = `${selectedSeats.length} seat${selectedSeats.length > 1 ? 's' : ''} selected`;
+                nextBtn.disabled = false;
+            }
+        }
+
+        // Form submission with Django CSRF protection
+        seatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (selectedSeats.length === 0) {
+                showError('Please select at least one seat');
+                return;
+            }
+
+            const formData = new FormData(seatForm);
+            
+            // Django CSRF token is automatically included via {% csrf_token %}
+            // But we can also add it to headers for AJAX requests
+            const csrfToken = getCSRFToken();
+
+            // Submit via fetch for better error handling
+            fetch(seatForm.action || window.location.href, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': csrfToken // Django expects this header for AJAX
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json().catch(() => {
+                        // If not JSON, redirect to next page
+                        window.location.href = '/success/';
+                    });
+                } else if (response.status === 403) {
+                    showError('CSRF verification failed. Please refresh the page and try again.');
+                } else if (response.status === 400) {
+                    return response.json().then(data => {
+                        showError(data.error || 'Invalid seat selection. Please try again.');
+                    });
+                } else {
+                    showError('An error occurred. Please try again.');
+                }
+            })
+            .then(data => {
+                if (data && data.success) {
+                    window.location.href = successUrl;
+                } else if (data && data.error) {
+                    showError(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('Network error. Please check your connection and try again.');
+            });
+        });
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // Add smooth animations on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const seatElements = document.querySelectorAll('.seat');
+            seatElements.forEach((seat, index) => {
+                seat.style.opacity = '0';
+                seat.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    seat.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    seat.style.opacity = '1';
+                    seat.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+        });
+
+        // Auto-refresh CSRF token periodically (Django handles this automatically)
+        // Django's CSRF tokens are session-based and don't need frequent refresh
+    </script>
+</body>
+</html>

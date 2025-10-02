@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Bus Booking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1d35 0%, #2d3561 50%, #3b4a7a 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a855f7, #ec4899, #8b5cf6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #a0a9c0;
+            font-weight: 300;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .contact-info {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ec4899;
+            margin-bottom: 25px;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #a0a9c0;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group select option {
+            background: #2d3561;
+            color: #ffffff;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #ec4899;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .contact-item-icon {
+            font-size: 1.5rem;
+            color: #a855f7;
+            margin-top: 2px;
+        }
+
+        .contact-item-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+
+        .contact-item-content p {
+            color: #a0a9c0;
+            line-height: 1.5;
+        }
+
+        .contact-item-content a {
+            color: #ec4899;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item-content a:hover {
+            color: #a855f7;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .contact-form,
+            .contact-info {
+                padding: 20px;
+            }
+        }
+
+        /* Icons using CSS */
+        .icon-mail::before { content: "📧"; }
+        .icon-phone::before { content: "📞"; }
+        .icon-user::before { content: "👤"; }
+        .icon-message::before { content: "💬"; }
+        .icon-subject::before { content: "📝"; }
+        .icon-location::before { content: "📍"; }
+        .icon-clock::before { content: "🕒"; }
+        .icon-support::before { content: "🎧"; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Contact Us</h1>
+            <p>Get in touch with our team - we're here to help with your journey</p>
+        </div>
+
+        <div class="contact-content">
+            <!-- Contact Form -->
+            <div class="contact-form">
+                <h2 class="section-title">
+                    <span class="section-icon icon-message"></span>
+                    Send Us a Message
+                </h2>
+                
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label><span class="icon-user"></span> Full Name</label>
+                            <input type="text" name="fullName" required>
+                        </div>
+                        <div class="input-group">
+                            <label><span class="icon-phone"></span> Phone Number</label>
+                            <input type="tel" name="phone" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label><span class="icon-mail"></span> Email Address</label>
+                        <input type="email" name="email" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label><span class="icon-subject"></span> Subject</label>
+                        <select name="subject" required>
+                            <option value="">Choose a subject</option>
+                            <option value="booking">Booking Inquiry</option>
+                            <option value="cancellation">Cancellation/Refund</option>
+                            <option value="schedule">Schedule Information</option>
+                            <option value="complaint">Complaint</option>
+                            <option value="suggestion">Suggestion</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label><span class="icon-message"></span> Message</label>
+                        <textarea name="message" placeholder="Please describe your inquiry in detail..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <h2 class="section-title">
+                    <span class="section-icon icon-support"></span>
+                    Get In Touch
+                </h2>
+
+                <div class="contact-item">
+                    <div class="contact-item-icon icon-location"></div>
+                    <div class="contact-item-content">
+                        <h3>Our Office</h3>
+                        <p>123 Transport Hub Street<br>
+                        City Center, State 12345<br></p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-item-icon icon-phone"></div>
+                    <div class="contact-item-content">
+                        <h3>Phone Support</h3>
+                        <p><a href="tel:+1234567890">8610274460</a><br>
+                        <a href="tel:+1234567891">6369168586</a> (Emergency)</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-item-icon icon-mail"></div>
+                    <div class="contact-item-content">
+                        <h3>Email Support</h3>
+                        <p><a href="mailto:support@busbooking.com">prema36063@gmail.com</a><br>
+                        <a href="mailto:info@busbooking.com">sandiya1804@gmail.com</a></p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form submission handler
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            // Simulate form submission
+            const submitBtn = this.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                alert('Thank you for your message! We will get back to you within 24 hours.');
+                this.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        // Add smooth animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe contact items for animation
+        document.querySelectorAll('.contact-item').forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(20px)';
+            item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>

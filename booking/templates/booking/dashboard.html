@@ -1,0 +1,488 @@
+<!-- booking/templates/booking/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Bus Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #4facfe;
+            --warning-color: #f8b500;
+            --info-color: #17a2b8;
+            --dark-bg: #0f0f23;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --shadow-glow: 0 0 40px rgba(102, 126, 234, 0.3);
+            --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.4);
+            --border-radius: 24px;
+            --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1a2e 30%, #16213e 60%, #0f3460 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(240, 147, 251, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        /* Floating orbs */
+        body::after {
+            content: '';
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.08), transparent 70%);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            animation: pulse 6s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.3; }
+            100% { transform: scale(1.3) translate(-30px, 30px); opacity: 0.6; }
+        }
+
+        .navbar {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: slideDown 1s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .navbar h2 {
+            color: var(--text-primary);
+            text-align: center;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite alternate;
+            position: relative;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.3)); }
+            to { filter: drop-shadow(0 0 20px rgba(240, 147, 251, 0.5)); }
+        }
+
+        .navbar h2::before {
+            content: '🚍';
+            position: absolute;
+            left: -50px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .container {
+            max-width: min(1200px, 95vw);
+            margin: 0 auto;
+            padding: clamp(2rem, 5vw, 4rem);
+            animation: fadeIn 1s ease 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: slideInUp 1s ease 0.5s both;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-section h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .welcome-section h1::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+            transform: translateX(-50%);
+            animation: expandWidth 1s ease 1s both;
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 80px; }
+        }
+
+        .welcome-section p {
+            color: var(--text-secondary);
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            margin-top: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.2s both;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .dashboard-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            animation: cardSlideIn 0.8s ease var(--card-delay, 0s) both;
+        }
+
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: var(--transition-smooth);
+        }
+
+        .dashboard-card:hover::before {
+            left: 100%;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: var(--shadow-card), var(--shadow-glow);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            background: linear-gradient(135deg, var(--card-color, var(--primary-color)), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: iconPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes iconPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--card-color, var(--primary-color));
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            transition: var(--transition-smooth);
+        }
+
+        .dashboard-card:hover .card-action {
+            transform: translateX(5px);
+        }
+
+        /* Individual card colors */
+        .card-book { --card-color: var(--success-color); }
+        .card-view { --card-color: var(--info-color); }
+        .card-feedback { --card-color: var(--warning-color); }
+        .card-contact { --card-color: var(--accent-color); }
+
+        /* Status indicators */
+        .status-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--card-color, var(--primary-color));
+            animation: statusBlink 2s infinite;
+        }
+
+        @keyframes statusBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        /* Quick stats section */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            animation: slideInLeft 1s ease 0.8s both;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .navbar h2::before {
+                position: static;
+                margin-right: 0.5rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .dashboard-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .card-icon {
+                font-size: 2.5rem;
+            }
+
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>Smart Bus Booking System</h2>
+    </div>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Welcome to the Dashboard</h1>
+            <p>Manage your bus bookings with ease and efficiency</p>
+        </div>
+
+        <div class="quick-stats">
+            <div class="stat-item">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Service</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">50+</span>
+                <span class="stat-label">Routes</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">1000+</span>
+                <span class="stat-label">Happy Customers</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">99%</span>
+                <span class="stat-label">On Time</span>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+            <a href="{% url 'book_ticket' 1 %}" class="dashboard-card card-book" style="--card-delay: 0.2s">
+                <div class="status-indicator"></div>
+                <i class="fas fa-ticket-alt card-icon"></i>
+                <h3 class="card-title">Book Ticket</h3>
+                <p class="card-description">Reserve your seat and plan your journey with our easy booking system</p>
+                <span class="card-action">
+                    Book Now <i class="fas fa-arrow-right"></i>
+                </span>
+            </a>
+
+            <a href="{% url 'view_ticket_by_phone' %}" class="dashboard-card card-view" style="--card-delay: 0.4s">
+                <div class="status-indicator"></div>
+                <i class="fas fa-search card-icon"></i>
+                <h3 class="card-title">View Ticket</h3>
+                <p class="card-description">Check your booking details and download your ticket instantly</p>
+                <span class="card-action">
+                    View Details <i class="fas fa-arrow-right"></i>
+                </span>
+            </a>
+
+            <a href="{% url 'feedback' %}" class="dashboard-card card-feedback" style="--card-delay: 0.6s">
+                <div class="status-indicator"></div>
+                <i class="fas fa-comments card-icon"></i>
+                <h3 class="card-title">Feedback</h3>
+                <p class="card-description">Share your experience and help us improve our services</p>
+                <span class="card-action">
+                    Give Feedback <i class="fas fa-arrow-right"></i>
+                </span>
+            </a>
+
+            <a href="{% url 'contact' %}" class="dashboard-card card-contact" style="--card-delay: 0.8s">
+                <div class="status-indicator"></div>
+                <i class="fas fa-phone card-icon"></i>
+                <h3 class="card-title">Contact</h3>
+                <p class="card-description">Get in touch with our support team for any assistance</p>
+                <span class="card-action">
+                    Contact Us <i class="fas fa-arrow-right"></i>
+                </span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

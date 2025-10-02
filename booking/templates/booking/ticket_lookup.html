@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View My Ticket</title>
+</head>
+<body>
+    <h2>Enter Details to View Your Ticket</h2>
+    
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="phone">Phone Number:</label>
+        <input type="text" name="phone" required><br><br>
+
+        <label for="journey_date">Journey Date (YYYY-MM-DD):</label>
+        <input type="date" name="journey_date" required><br><br>
+
+        <button type="submit">Search Ticket</button>
+    </form>
+</body>
+</html>

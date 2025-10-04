@@ -1,6 +1,6 @@
 ## Smart Bus Reservation System
 
-The Smart Bus Reservation System is a cloud-enabled web platform designed to make intercity travel smarter and more efficient. It supports dynamic seat allocation, real-time booking updates, e-ticket delivery via email, and SMS notifications to enhance passenger experience. Built using Django, MongoDB, and AWS, the system ensures reliability, automation, and scalability.
+The Smart Bus Reservation System is a web platform designed to make intercity travel smarter and more efficient. It supports dynamic seat allocation, real-time booking updates, e-ticket delivery via email, and SMS notifications to enhance passenger experience.
 
 ## Key Features
 

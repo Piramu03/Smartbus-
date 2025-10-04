@@ -1,4 +1,4 @@
-Smart Bus Reservation System
+## Smart Bus Reservation System
 
 The Smart Bus Reservation System is a cloud-enabled web platform designed to make intercity travel smarter and more efficient. It supports dynamic seat allocation, real-time booking updates, e-ticket delivery via email, and SMS notifications to enhance passenger experience. Built using Django, MongoDB, and AWS, the system ensures reliability, automation, and scalability.
 
@@ -42,11 +42,11 @@ Monitor seat usage and journey statistics
 View passenger feedback reports and system logs
 
 ## Tech Stack
-Frontend - HTML/CSS/Javascript
-Backend - Django(Python)
-Database - SQLite
-Task - Celery
-Notifications - Twilio(SMS),SMTP(Email)
+-- **Frontend** - HTML/CSS/Javascript
+-- **Backend** - Django(Python)
+-- **Database** - SQLite
+-- **Task** - Celery
+-- **Notifications** - Twilio(SMS),SMTP(Email)
 
 ## Installation Guide
 1.Clone the Repository
@@ -80,8 +80,5 @@ Configure Environment Variables:
 
 ## Developed By
 
-Piramu M
-Final Year – B.Tech Artificial Intelligence and Data Science
-JRE College of Engineering
-
-   
+-- **Piramu M**
+-- **Final Year – B.Tech Artificial Intelligence and Data Science**
